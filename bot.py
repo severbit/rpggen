@@ -6,16 +6,20 @@ from dotenv import load_dotenv
 import random
 import asyncio
 import os
-    
+
 # Загрузка переменных окружения из .env файла
 load_dotenv()
 
-
 TOKEN = os.getenv("BOT_TOKEN")
+
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
+commands = [
+    types.BotCommand(command="/start", description="Начать взаимодействие с ботом"),
+    types.BotCommand(command="/create", description="Создать нового персонажа"),
+]
 
 names = ["Гримдор", "Эллиан", "Рагнар", "Мортиус", "Люциус", "Ария", "Торион"]
 races = ["Человек", "Эльф", "Орк", "Гном", "Тролль", "Демон"]
@@ -57,6 +61,8 @@ async def create_character(message: Message):
     await message.answer(text, parse_mode=ParseMode.HTML)
 
 async def main():
+    print("Бот запущен. Ожидание команд...")
+    await bot.set_my_commands(commands)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
